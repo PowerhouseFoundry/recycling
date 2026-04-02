@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Recycling Toss</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="game">
+    <div id="bg"></div>
+
+<div id="startScreen">
+  <div class="start-poster-wrap">
+    <img id="startPoster" src="images/start.png" alt="Recycling guide poster">
+    <button id="startGameBtn" type="button">START GAME</button>
+  </div>
+</div>
+<header id="hud">
+  <div class="hud-pill score-pill">
+    <span class="hud-label">Score</span>
+    <span class="hud-value" id="score">0</span>
+  </div>
+
+  <div class="hud-pill time-pill">
+    <span class="hud-label">Time</span>
+    <span class="hud-value" id="timer">60</span>
+  </div>
+
+  <div class="hud-pill streak-pill" id="streakPill">
+    <span class="hud-label">Streak</span>
+    <span class="hud-value" id="streak">0</span>
+    <span class="streak-badge" id="streakBadge">x2</span>
+  </div>
+
+  <div class="next-card">
+    <span class="hud-label">Next Item</span>
+    <span class="next-progress" id="counter">1/5</span>
+    <img id="nextItemPreview" alt="Next item">
+  </div>
+</header>
+
+    <div id="feedback"></div>
+
+    <div id="retroOverlay" aria-hidden="true">
+      <div id="retroText">LEVEL 1</div>
+      <div id="retroSubtext">GET 5 ITEMS</div>
+    </div>
+
+    <div id="gameOverPanel" class="hidden">
+      <div class="game-over-inner">
+        <div class="go-title">GAME OVER</div>
+        <div class="go-line" id="finalLevel">LEVEL 1</div>
+        <div class="go-line" id="finalScore">SCORE 0</div>
+        <button id="playAgainBtn" type="button">PLAY AGAIN</button>
+      </div>
+    </div>
+
+    <div id="binZone">
+      <div class="binWrap" data-key="recycle">
+        <div class="targetHint" id="hint-recycle"></div>
+        <img class="binImage" src="images/bins/bin-green.png" alt="Recycle bin">
+      </div>
+      <div class="binWrap" data-key="garden">
+        <div class="targetHint" id="hint-garden"></div>
+        <img class="binImage" src="images/bins/bin-brown.png" alt="Garden waste bin">
+      </div>
+      <div class="binWrap" data-key="general">
+        <div class="targetHint" id="hint-general"></div>
+        <img class="binImage" src="images/bins/bin-black.png" alt="General waste bin">
+      </div>
+      <div class="binWrap centreWrap" data-key="centre">
+        <div class="targetHint" id="hint-centre"></div>
+        <img class="binImage" src="images/bins/recycling-centre.png" alt="Recycling centre">
+      </div>
+    </div>
+
+    <div id="itemShadow"></div>
+    <img id="currentItem" draggable="false" alt="Current item">
+    <div id="dragLine"></div>
+
+    <button id="restartBtn" type="button">Restart</button>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
