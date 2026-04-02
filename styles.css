@@ -509,7 +509,7 @@ body{background:#d8d8d8}
 
   #currentItem{
     width:min(29vw,185px);
-    bottom:15vh;
+    bottom:17.5vh;
     max-height:18vh
   }
 
