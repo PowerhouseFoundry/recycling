@@ -509,13 +509,13 @@ body{background:#d8d8d8}
 
   #currentItem{
     width:min(29vw,185px);
-    bottom:17.5vh;
+    bottom:22vh;
     max-height:18vh
   }
 
   #itemShadow{
     width:min(18vw,100px);
-    bottom:13.2vh
+    bottom:20vh;
   }
 
   #restartBtn{
