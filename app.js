@@ -175,12 +175,13 @@ function targetAt(x,y){
 }
 function resetPos(){
   itemEl.style.left='50%';
-  itemEl.style.bottom=window.innerWidth<700?'3.2vh':'2.2vh';
+  itemEl.style.bottom=window.innerWidth<700?'22vh':'9.5vh';
   itemEl.style.top='auto';
   itemEl.style.transform='translateX(-50%)';
   itemEl.style.opacity='1';
+
   shadowEl.style.left='50%';
-  shadowEl.style.bottom=window.innerWidth<700?'2vh':'1.5vh';
+  shadowEl.style.bottom=window.innerWidth<700?'20vh':'8vh';
   shadowEl.style.width='';
   shadowEl.style.opacity='1';
 }
