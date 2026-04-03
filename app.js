@@ -84,22 +84,42 @@ const backgrounds=[
   { score:2000, file:'images/kitchen-background-5.png' }
 ];
 
-let order=[],idx=0,current=null,score=0,streak=0,correctCount=0,level=1,timeLeft=60,timerId=null,dragging=false,dragStart=null,animating=false,ended=false,lastRelease=null,levelPerfect=true,panicMode=false,currentBackgroundIndex=0,pendingBackgroundIndex=0,started=false;
+let order=[],idx=0,current=null,score=0,streak=0,correctCount=0,level=1,timeLeft=60,timerId=null,dragging=false,dragStart=null,animating=false,ended=false,lastRelease=null,levelPerfect=true,panicMode=false,currentBackgroundIndex=0,pendingBackgroundIndex=0,started=false,lastMultiplier=1;
 
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const levelGoal=l=>l*5;
+function getMultiplier(){
+  if(streak>=30) return 5;
+  if(streak>=20) return 4;
+  if(streak>=10) return 3;
+  if(streak>=5) return 2;
+  return 1;
+}
 
+function flashMultiplierUp(multiplier){
+  streakPill.classList.remove('multiplier-pop');
+  void streakPill.offsetWidth;
+  streakPill.classList.add('multiplier-pop');
+  showRetro(`x${multiplier} STREAK!`,'MULTIPLIER UP');
+}
 function fallback(img,label){
   img.onerror=()=>{const svg=encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220"><rect width="220" height="220" rx="22" fill="#d1d5db"/><text x="110" y="110" font-size="18" font-family="Arial" text-anchor="middle" fill="#111827">${label}</text></svg>`);img.src=`data:image/svg+xml;charset=utf-8,${svg}`;}
 }
 function pop(el){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop')}
 function hud(){
+  const multiplier=getMultiplier();
   scoreEl.textContent=score;
   timerEl.textContent=timeLeft;
   counterEl.textContent=`${Math.min(correctCount+1, levelGoal(level))}/${levelGoal(level)}`;
   streakEl.textContent=streak;
+
+  const streakBadge=document.getElementById('streakBadge');
+  if(streakBadge) streakBadge.textContent=`x${multiplier}`;
+
   pop(scoreEl);
-  if(streak>=5) streakPill.classList.add('streak-active'); else streakPill.classList.remove('streak-active');
+
+  if(multiplier>1) streakPill.classList.add('streak-active');
+  else streakPill.classList.remove('streak-active');
 }
 function message(text,good){
   feedbackEl.textContent=text;
@@ -200,7 +220,9 @@ function setItem(){
   hud();
 }
 function nextItem(){idx+=1;setItem()}
-function points(){return streak>=5?20:10}
+function points(){
+  return 10*getMultiplier();
+}
 
 function applyBackground(index){
   currentBackgroundIndex=index;
@@ -402,13 +424,26 @@ function animateShot(targetKey){
     if(correct){
       highlight(targetKey,'correct');
       sfxGood();
-      score+=points();
+
+      const oldMultiplier=getMultiplier();
       streak+=1;
+      const newMultiplier=getMultiplier();
+
+      score+=points();
       correctCount+=1;
       hud();
       updatePendingBackgroundUnlock();
+
+      if(newMultiplier>oldMultiplier){
+        flashMultiplierUp(newMultiplier);
+        message(`x${newMultiplier} multiplier!`,true);
+      } else {
+        message('Nice!',true);
+      }
+
+      lastMultiplier=newMultiplier;
       levelCheck();
-      message('Nice!',true);
+
       itemEl.style.opacity='0';
       shadowEl.style.opacity='0';
       setTimeout(()=>{
