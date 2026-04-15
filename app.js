@@ -268,6 +268,7 @@ function updatePendingBackgroundUnlock(){
   if(unlocked>pendingBackgroundIndex){
     pendingBackgroundIndex=unlocked;
     message('New background unlocked!',true);
+    triggerBackgroundUnlockNow();
   }
 }
 
@@ -277,7 +278,22 @@ function applyPendingBackgroundIfNeeded(){
     showRetro(`LEVEL ${level}`,`NEW BACKGROUND!`);
   }
 }
+function triggerBackgroundUnlockNow(){
+  if(pendingBackgroundIndex<=currentBackgroundIndex) return;
 
+  if(timerId) clearInterval(timerId);
+  timerId=null;
+  animating=true;
+  setPanicMode(false);
+
+  applyBackground(pendingBackgroundIndex);
+  showRetro('NEW BACKGROUND!','KEEP GOING');
+
+  setTimeout(()=>{
+    animating=false;
+    restartLevelTimer();
+  },1200);
+}
 function setPanicMode(active){
   panicMode=active;
   if(!active){
@@ -336,7 +352,6 @@ function levelCheck(){
     correctCount=0;
     levelPerfect=true;
     setPanicMode(false);
-    applyPendingBackgroundIfNeeded();
     sfxLevel();
     showRetro(`LEVEL ${completedLevel} COMPLETE!`,`LEVEL ${level} · GET ${levelGoal(level)} ITEMS`);
 
