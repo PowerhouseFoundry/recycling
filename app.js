@@ -40,6 +40,7 @@ const items = [
   { n:"Lightbulb", c:"centre", s:"images/recycling-centre/lightbulb.png" }
   
 ];
+const rotateOverlay=document.getElementById('rotateOverlay');
 const startScreen=document.getElementById('startScreen');
 const startGameBtn=document.getElementById('startGameBtn');
 const itemEl=document.getElementById('currentItem');
@@ -88,6 +89,29 @@ let order=[],idx=0,current=null,score=0,streak=0,correctCount=0,level=1,timeLeft
 
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const levelGoal=l=>l*5;
+function isTouchDevice(){
+  return ('ontouchstart' in window) || navigator.maxTouchPoints>0;
+}
+
+function isPortraitMobile(){
+  return isTouchDevice() && window.innerHeight>window.innerWidth;
+}
+
+function updateOrientationGate(){
+  const portraitBlocked=isPortraitMobile();
+
+  if(rotateOverlay){
+    if(portraitBlocked) rotateOverlay.classList.remove('hidden');
+    else rotateOverlay.classList.add('hidden');
+  }
+
+  if(startScreen){
+    if(portraitBlocked) startScreen.classList.add('hidden');
+    else if(!started) startScreen.classList.remove('hidden');
+  }
+
+  return portraitBlocked;
+}
 function getMultiplier(){
   if(streak>=30) return 5;
   if(streak>=20) return 4;
@@ -552,10 +576,11 @@ function showStartScreen(){
   if(timerId) clearInterval(timerId);
   timerId=null;
   setPanicMode(false);
-  if(startScreen) startScreen.classList.remove('hidden');
+  updateOrientationGate();
 }
 
 function beginGame(){
+  if(updateOrientationGate()) return;
   started=true;
   if(startScreen) startScreen.classList.add('hidden');
   showRetro('LEVEL 1','GET 5 ITEMS');
@@ -567,6 +592,8 @@ window.addEventListener('mouseup',e=>endDrag(e.clientX,e.clientY));
 itemEl.addEventListener('touchstart',e=>{const t=e.touches[0];startDrag(t.clientX,t.clientY)},{passive:true});
 window.addEventListener('touchmove',e=>{const t=e.touches[0]; if(t) moveDrag(t.clientX,t.clientY)},{passive:true});
 window.addEventListener('touchend',e=>{const t=e.changedTouches[0]; if(t) endDrag(t.clientX,t.clientY)},{passive:true});
+window.addEventListener('resize',updateOrientationGate);
+window.addEventListener('orientationchange',updateOrientationGate);
 startGameBtn.addEventListener('click',beginGame);
 restartBtn.addEventListener('click',init);
 playAgainBtn.addEventListener('click',init);
