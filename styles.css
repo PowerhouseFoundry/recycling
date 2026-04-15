@@ -88,8 +88,9 @@ body{background:#d8d8d8}
   background:linear-gradient(180deg,#ffd966,#ffb300);
   color:#111827;
   box-shadow:0 8px 22px rgba(0,0,0,.26);
-  cursor:pointer
   margin-bottom:1vh;
+  cursor:pointer
+  
 }
 
 #hud{
