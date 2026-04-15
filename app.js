@@ -27,7 +27,7 @@ const items = [
   { n:"Twigs", c:"garden", s:"images/garden-waste/twigs.png" },
   { n:"Flowers", c:"garden", s:"images/garden-waste/flowers.png" },
   { n:"Crisp packet", c:"general", s:"images/general-waste/crisp-packet.png" },
-  { n:"Dirty pizza box", c:"general", s:"images/general-waste/dirty-pizza-box.png" },
+  { n:"Dirty pizza box", c:"recycle", s:"images/general-waste/dirty-pizza-box.png" },
   { n:"Food waste", c:"general", s:"images/general-waste/food-waste.png" },
   { n:"Broken ceramic", c:"general", s:"images/general-waste/broken-ceramic.png" },
   { n:"Plastic film", c:"general", s:"images/general-waste/plastic-film.png" },
