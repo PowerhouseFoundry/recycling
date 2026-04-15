@@ -71,7 +71,7 @@ body{background:#d8d8d8}
 #startPoster{
   display:block;
   width:100%;
-  max-height:72vh;
+  max-height:65vh;
   object-fit:contain;
   border-radius:1.2rem;
   box-shadow:0 24px 60px rgba(0,0,0,.42);
@@ -89,6 +89,7 @@ body{background:#d8d8d8}
   color:#111827;
   box-shadow:0 8px 22px rgba(0,0,0,.26);
   cursor:pointer
+  margin-bottom:1vh;
 }
 
 #hud{
