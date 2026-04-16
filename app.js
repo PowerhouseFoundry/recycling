@@ -1,23 +1,23 @@
 const items = [
   { n:"Plastic bottle", c:"recycle", s:"images/recycle/plastic-bottle.png" },
-{ n:"Glass bottle", c:"recycle", s:"images/recycling-centre/glass-bottle.png" },
+  { n:"Glass bottle", c:"recycle", s:"images/recycling-centre/glass-bottle.png" },
   { n:"Tin can", c:"recycle", s:"images/recycle/tin-can.png" },
   { n:"Cardboard box", c:"recycle", s:"images/recycle/cardboard-box.png" },
   { n:"Newspaper", c:"recycle", s:"images/recycle/newspaper.png" },
   { n:"Yoghurt pot", c:"recycle", s:"images/recycle/yoghurt-pot.png" },
-  // NEW ITEMS
 
-{ n:"Shampoo bottle", c:"recycle", s:"images/recycle/shampoo-bottle.png" },
-{ n:"Cereal box", c:"recycle", s:"images/recycle/cereal-box.png" },
-{ n:"Foil tray", c:"recycle", s:"images/recycle/foil-tray.png" },
+  { n:"Shampoo bottle", c:"recycle", s:"images/recycle/shampoo-bottle.png" },
+  { n:"Cereal box", c:"recycle", s:"images/recycle/cereal-box.png" },
+  { n:"Foil tray", c:"recycle", s:"images/recycle/foil-tray.png" },
 
-{ n:"Small branches", c:"garden", s:"images/garden-waste/small-branches.png" },
-{ n:"Dead houseplant", c:"garden", s:"images/garden-waste/dead-houseplant.png" },
+  { n:"Small branches", c:"garden", s:"images/garden-waste/small-branches.png" },
+  { n:"Dead houseplant", c:"garden", s:"images/garden-waste/dead-houseplant.png" },
 
-{ n:"Broken mug", c:"general", s:"images/general-waste/broken-mug.png" },
+  { n:"Broken mug", c:"general", s:"images/general-waste/broken-mug.png" },
 
-{ n:"Kettle", c:"centre", s:"images/recycling-centre/kettle.png" },
-{ n:"Extension leads", c:"centre", s:"images/recycling-centre/extension-leads.png" },
+  { n:"Kettle", c:"centre", s:"images/recycling-centre/kettle.png" },
+  { n:"Extension leads", c:"centre", s:"images/recycling-centre/extension-leads.png" },
+
   { n:"Takeaway bag", c:"recycle", s:"images/recycle/takeaway-bag.png" },
   { n:"Fizzy bottle", c:"recycle", s:"images/recycle/fizzy-bottle.png" },
   { n:"Burger box", c:"recycle", s:"images/recycle/burger-box.png" },
@@ -38,8 +38,8 @@ const items = [
   { n:"Phone", c:"centre", s:"images/recycling-centre/phone.png" },
   { n:"Toaster", c:"centre", s:"images/recycling-centre/toaster.png" },
   { n:"Lightbulb", c:"centre", s:"images/recycling-centre/lightbulb.png" }
-  
 ];
+
 const rotateOverlay=document.getElementById('rotateOverlay');
 const startScreen=document.getElementById('startScreen');
 const startGameBtn=document.getElementById('startGameBtn');
@@ -70,6 +70,7 @@ const bins={
   general:document.querySelector('.binWrap[data-key="general"]'),
   centre:document.querySelector('.binWrap[data-key="centre"]')
 };
+
 const hints={
   recycle:document.getElementById('hint-recycle'),
   garden:document.getElementById('hint-garden'),
@@ -82,13 +83,16 @@ const backgrounds=[
   { score:500, file:'images/kitchen-background-2.png' },
   { score:1000, file:'images/kitchen-background-3.png' },
   { score:1500, file:'images/kitchen-background-4.png' },
-  { score:2000, file:'images/kitchen-background-5.png' }
+  { score:2000, file:'images/kitchen-background-5.png' },
+  { score:2500, file:'images/kitchen-background-6.png' },
+  { score:3000, file:'images/kitchen-background-7.png' }
 ];
 
 let order=[],idx=0,current=null,score=0,streak=0,correctCount=0,level=1,timeLeft=60,timerId=null,dragging=false,dragStart=null,animating=false,ended=false,lastRelease=null,levelPerfect=true,panicMode=false,currentBackgroundIndex=0,pendingBackgroundIndex=0,started=false,lastMultiplier=1;
 
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const levelGoal=l=>l*5;
+
 function isTouchDevice(){
   return ('ontouchstart' in window) || navigator.maxTouchPoints>0;
 }
@@ -112,6 +116,7 @@ function updateOrientationGate(){
 
   return portraitBlocked;
 }
+
 function getMultiplier(){
   if(streak>=30) return 5;
   if(streak>=20) return 4;
@@ -120,16 +125,26 @@ function getMultiplier(){
   return 1;
 }
 
-function flashMultiplierUp(multiplier){
+function flashMultiplierUp(multiplier, subtext='MULTIPLIER UP'){
   streakPill.classList.remove('multiplier-pop');
   void streakPill.offsetWidth;
   streakPill.classList.add('multiplier-pop');
-  showRetro(`x${multiplier} STREAK!`,'MULTIPLIER UP');
+  showRetro(`x${multiplier} STREAK!`,subtext);
 }
+
 function fallback(img,label){
-  img.onerror=()=>{const svg=encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220"><rect width="220" height="220" rx="22" fill="#d1d5db"/><text x="110" y="110" font-size="18" font-family="Arial" text-anchor="middle" fill="#111827">${label}</text></svg>`);img.src=`data:image/svg+xml;charset=utf-8,${svg}`;}
+  img.onerror=()=>{
+    const svg=encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220"><rect width="220" height="220" rx="22" fill="#d1d5db"/><text x="110" y="110" font-size="18" font-family="Arial" text-anchor="middle" fill="#111827">${label}</text></svg>`);
+    img.src=`data:image/svg+xml;charset=utf-8,${svg}`;
+  };
 }
-function pop(el){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop')}
+
+function pop(el){
+  el.classList.remove('pop');
+  void el.offsetWidth;
+  el.classList.add('pop');
+}
+
 function hud(){
   const multiplier=getMultiplier();
   scoreEl.textContent=score;
@@ -145,12 +160,14 @@ function hud(){
   if(multiplier>1) streakPill.classList.add('streak-active');
   else streakPill.classList.remove('streak-active');
 }
+
 function message(text,good){
   feedbackEl.textContent=text;
   feedbackEl.style.background=good?'rgba(22,163,74,.9)':'rgba(220,38,38,.9)';
   feedbackEl.classList.add('show');
   setTimeout(()=>feedbackEl.classList.remove('show'),850);
 }
+
 function showRetro(main,sub=''){
   retroText.textContent=main;
   retroSubtext.textContent=sub;
@@ -158,6 +175,7 @@ function showRetro(main,sub=''){
   void retroOverlay.offsetWidth;
   retroOverlay.classList.add('show');
 }
+
 function showPerfectFlash(){
   const oldMainColor=retroText.style.color;
   const oldSubColor=retroSubtext.style.color;
@@ -178,6 +196,7 @@ function showPerfectFlash(){
     retroSubtext.style.textShadow=oldSubShadow;
   },1200);
 }
+
 function tone(freq,duration,type='sine',volume=.03){
   try{
     const ctx=new(window.AudioContext||window.webkitAudioContext)();
@@ -192,6 +211,7 @@ function tone(freq,duration,type='sine',volume=.03){
     o.stop(ctx.currentTime+duration/1000);
   }catch(e){}
 }
+
 const sfxGood=()=>{tone(580,90,'triangle',.04);setTimeout(()=>tone(860,120,'triangle',.03),70)};
 const sfxBad=()=>tone(220,120,'square',.03);
 const sfxBounce=()=>tone(180,80,'sawtooth',.02);
@@ -209,6 +229,7 @@ const sfxCheer=()=>{
 function clearHighlights(){Object.values(hints).forEach(e=>e.classList.remove('correct','wrong'))}
 function highlight(key,cls){clearHighlights();if(hints[key]) hints[key].classList.add(cls);setTimeout(clearHighlights,500)}
 function openingCenter(key){const r=bins[key].getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height*.13}}
+
 function targetAt(x,y){
   let found=null;
   Object.entries(bins).forEach(([k,w])=>{
@@ -217,6 +238,7 @@ function targetAt(x,y){
   });
   return found;
 }
+
 function resetPos(){
   itemEl.style.left='50%';
   itemEl.style.bottom=window.innerWidth<700?'22vh':'9.5vh';
@@ -229,21 +251,33 @@ function resetPos(){
   shadowEl.style.width='';
   shadowEl.style.opacity='1';
 }
+
 function setItem(){
   current=order[idx];
   if(!current){
-    order=shuffle(items); idx=0; current=order[idx];
+    order=shuffle(items);
+    idx=0;
+    current=order[idx];
   }
   itemEl.style.display='block';
   shadowEl.style.display='block';
-  itemEl.src=current.s; fallback(itemEl,current.n);
+  itemEl.src=current.s;
+  fallback(itemEl,current.n);
+
   const next=order[(idx+1)%order.length];
   nextEl.style.display='block';
-  nextEl.src=next.s; fallback(nextEl,next.n);
+  nextEl.src=next.s;
+  fallback(nextEl,next.n);
+
   resetPos();
   hud();
 }
-function nextItem(){idx+=1;setItem()}
+
+function nextItem(){
+  idx+=1;
+  setItem();
+}
+
 function points(){
   return 10*getMultiplier();
 }
@@ -263,37 +297,18 @@ function getUnlockedBackgroundIndex(){
   return unlocked;
 }
 
+function hasPendingBackgroundUnlock(){
+  return pendingBackgroundIndex>currentBackgroundIndex;
+}
+
 function updatePendingBackgroundUnlock(){
   const unlocked=getUnlockedBackgroundIndex();
   if(unlocked>pendingBackgroundIndex){
     pendingBackgroundIndex=unlocked;
     message('New background unlocked!',true);
-    triggerBackgroundUnlockNow();
   }
 }
 
-function applyPendingBackgroundIfNeeded(){
-  if(pendingBackgroundIndex>currentBackgroundIndex){
-    applyBackground(pendingBackgroundIndex);
-    showRetro(`LEVEL ${level}`,`NEW BACKGROUND!`);
-  }
-}
-function triggerBackgroundUnlockNow(){
-  if(pendingBackgroundIndex<=currentBackgroundIndex) return;
-
-  if(timerId) clearInterval(timerId);
-  timerId=null;
-  animating=true;
-  setPanicMode(false);
-
-  applyBackground(pendingBackgroundIndex);
-  showRetro('NEW BACKGROUND!','KEEP GOING');
-
-  setTimeout(()=>{
-    animating=false;
-    restartLevelTimer();
-  },1200);
-}
 function setPanicMode(active){
   panicMode=active;
   if(!active){
@@ -317,13 +332,18 @@ function panicPulse(){
   },90);
 }
 
-function restartLevelTimer(){
+function stopTimer(){
   if(timerId) clearInterval(timerId);
-  timeLeft=60;
+  timerId=null;
   setPanicMode(false);
+}
+
+function continueCurrentTimer(){
+  stopTimer();
   hud();
   timerId=setInterval(()=>{
     timeLeft-=1;
+
     if(timeLeft<=5 && timeLeft>0){
       if(!panicMode) setPanicMode(true);
       sfxPanicTick();
@@ -332,47 +352,88 @@ function restartLevelTimer(){
     if(timeLeft>5 && panicMode){
       setPanicMode(false);
     }
+
     hud();
+
     if(timeLeft<=0) endGame();
   },1000);
 }
 
-function levelCheck(){
-  if(correctCount>=levelGoal(level)){
-    const completedLevel=level;
-    const wasPerfect=levelPerfect;
+function restartLevelTimer(){
+  timeLeft=60;
+  continueCurrentTimer();
+}
 
-    if(wasPerfect){
-      score+=50;
-      hud();
-      updatePendingBackgroundUnlock();
-    }
+function addTimeBonus(seconds,mainText,subText){
+  timeLeft=Math.min(99,timeLeft+seconds);
+  hud();
+  showRetro(mainText,subText);
+  message(`+${seconds} seconds!`,true);
+}
 
-    level+=1;
-    correctCount=0;
-    levelPerfect=true;
-    setPanicMode(false);
-    sfxLevel();
-    showRetro(`LEVEL ${completedLevel} COMPLETE!`,`LEVEL ${level} · GET ${levelGoal(level)} ITEMS`);
-
-    if(wasPerfect){
-      setTimeout(()=>{
-        sfxCheer();
-        showPerfectFlash();
-      },1250);
-    }
-
-    restartLevelTimer();
+function playBackgroundUnlockPause(afterPause){
+  if(!hasPendingBackgroundUnlock()){
+    afterPause();
+    return;
   }
+
+  stopTimer();
+  animating=true;
+
+  applyBackground(pendingBackgroundIndex);
+  showRetro('NEW BACKGROUND!','TIMER PAUSED');
+
+  setTimeout(()=>{
+    animating=false;
+    hud();
+    afterPause();
+    if(started && !ended) continueCurrentTimer();
+  },1200);
+}
+
+function levelCheck(){
+  if(correctCount<levelGoal(level)) return;
+
+  const completedLevel=level;
+  const wasPerfect=levelPerfect;
+
+  if(wasPerfect){
+    score+=50;
+    hud();
+    updatePendingBackgroundUnlock();
+  }
+
+  level+=1;
+  correctCount=0;
+  levelPerfect=true;
+  setPanicMode(false);
+
+  restartLevelTimer();
+
+  if(level>=5){
+    timeLeft=Math.min(99,timeLeft+15);
+    hud();
+    showRetro(`LEVEL ${completedLevel} COMPLETE!`,`LEVEL ${level} · +15 SECONDS`);
+    message('Level bonus: +15 seconds!',true);
+  } else {
+    showRetro(`LEVEL ${completedLevel} COMPLETE!`,`LEVEL ${level} · GET ${levelGoal(level)} ITEMS`);
+  }
+
+  if(wasPerfect){
+    setTimeout(()=>{
+      sfxCheer();
+      showPerfectFlash();
+    },1250);
+  }
+
+  sfxLevel();
 }
 
 function endGame(){
   ended=true;
   animating=true;
   dragging=false;
-  setPanicMode(false);
-  if(timerId) clearInterval(timerId);
-  timerId=null;
+  stopTimer();
   showRetro('GAME OVER',`LEVEL ${level}`);
   finalLevel.textContent=`LEVEL ${level}`;
   finalScore.textContent=`SCORE ${score}`;
@@ -425,9 +486,14 @@ function animateShot(targetKey){
   function finishToNext(delay=220){
     itemEl.style.opacity='0';
     shadowEl.style.opacity='0';
+
     setTimeout(()=>{
-      animating=false;
-      nextItem();
+      const proceed=()=>{
+        animating=false;
+        nextItem();
+      };
+
+      playBackgroundUnlockPause(proceed);
     },delay);
   }
 
@@ -473,7 +539,9 @@ function animateShot(targetKey){
       hud();
       updatePendingBackgroundUnlock();
 
-      if(newMultiplier>oldMultiplier){
+      if([10,20,30].includes(streak)){
+        addTimeBonus(10,`x${newMultiplier} STREAK!`,'+10 SECONDS');
+      } else if(newMultiplier>oldMultiplier){
         flashMultiplierUp(newMultiplier);
         message(`x${newMultiplier} multiplier!`,true);
       } else {
@@ -483,12 +551,7 @@ function animateShot(targetKey){
       lastMultiplier=newMultiplier;
       levelCheck();
 
-      itemEl.style.opacity='0';
-      shadowEl.style.opacity='0';
-      setTimeout(()=>{
-        animating=false;
-        nextItem();
-      },260);
+      finishToNext(260);
       return;
     }
 
@@ -546,7 +609,12 @@ function animateShot(targetKey){
         }
 
         sfxBounce();
-        finishToNext(180);
+        itemEl.style.opacity='0';
+        shadowEl.style.opacity='0';
+        setTimeout(()=>{
+          animating=false;
+          nextItem();
+        },180);
       }
 
       requestAnimationFrame(fallPhase);
@@ -586,11 +654,10 @@ function endDrag(x,y){
   dragLine.style.display='none';
   animateShot(targetAt(x,y));
 }
+
 function showStartScreen(){
   started=false;
-  if(timerId) clearInterval(timerId);
-  timerId=null;
-  setPanicMode(false);
+  stopTimer();
   updateOrientationGate();
 }
 
@@ -601,6 +668,7 @@ function beginGame(){
   showRetro('LEVEL 1','GET 5 ITEMS');
   restartLevelTimer();
 }
+
 itemEl.addEventListener('mousedown',e=>{e.preventDefault();startDrag(e.clientX,e.clientY)});
 window.addEventListener('mousemove',e=>moveDrag(e.clientX,e.clientY));
 window.addEventListener('mouseup',e=>endDrag(e.clientX,e.clientY));
@@ -624,6 +692,7 @@ function init(){
   levelPerfect=true;
   currentBackgroundIndex=0;
   pendingBackgroundIndex=0;
+  lastMultiplier=1;
   setPanicMode(false);
   applyBackground(0);
   order=shuffle(items);
