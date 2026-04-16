@@ -85,7 +85,8 @@ const backgrounds=[
   { score:1500, file:'images/kitchen-background-4.png' },
   { score:2000, file:'images/kitchen-background-5.png' },
   { score:2500, file:'images/kitchen-background-6.png' },
-  { score:3000, file:'images/kitchen-background-7.png' }
+  { score:3000, file:'images/kitchen-background-7.png' },
+  { score:4000, file:'images/kitchen-background-8.png' }
 ];
 
 let order=[],idx=0,current=null,score=0,streak=0,correctCount=0,level=1,timeLeft=60,timerId=null,dragging=false,dragStart=null,animating=false,ended=false,lastRelease=null,levelPerfect=true,panicMode=false,currentBackgroundIndex=0,pendingBackgroundIndex=0,started=false,lastMultiplier=1;
