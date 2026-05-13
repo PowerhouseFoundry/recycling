@@ -89,11 +89,18 @@ const backgrounds=[
   { score:4000, file:'images/kitchen-background-8.png' }
 ];
 
-let order=[],idx=0,current=null,score=0,streak=0,correctCount=0,level=1,timeLeft=60,timerId=null,dragging=false,dragStart=null,animating=false,ended=false,lastRelease=null,levelPerfect=true,panicMode=false,currentBackgroundIndex=0,pendingBackgroundIndex=0,started=false,lastMultiplier=1;
+let order=[],idx=0,current=null,score=0,streak=0,correctCount=0,level=1,timeLeft=60,timerId=null,dragging=false,dragStart=null,animating=false,ended=false,lastRelease=null,levelPerfect=true;
 
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const levelGoal=l=>l*5;
+function requestGameFullscreen(){
+  const el=document.documentElement;
 
+  try{
+    if(el.requestFullscreen) el.requestFullscreen();
+    else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  }catch(e){}
+}
 function isTouchDevice(){
   return ('ontouchstart' in window) || navigator.maxTouchPoints>0;
 }
@@ -176,7 +183,26 @@ function showRetro(main,sub=''){
   void retroOverlay.offsetWidth;
   retroOverlay.classList.add('show');
 }
+function showPerfectFlash(){
+  const oldMainColor=retroText.style.color;
+  const oldSubColor=retroSubtext.style.color;
+  const oldMainShadow=retroText.style.textShadow;
+  const oldSubShadow=retroSubtext.style.textShadow;
 
+  retroText.style.color='#ffd700';
+  retroSubtext.style.color='#fff1a8';
+  retroText.style.textShadow='0 0 14px rgba(255,215,0,.9),0 4px 0 #7a5600,0 8px 18px rgba(0,0,0,.45)';
+  retroSubtext.style.textShadow='0 0 10px rgba(255,215,0,.65),0 3px 0 #7a5600,0 6px 14px rgba(0,0,0,.4)';
+
+  showRetro('PERFECT!','+50 BONUS');
+
+  setTimeout(()=>{
+    retroText.style.color=oldMainColor;
+    retroSubtext.style.color=oldSubColor;
+    retroText.style.textShadow=oldMainShadow;
+    retroSubtext.style.textShadow=oldSubShadow;
+  },1200);
+}
 function showPerfectFlash(){
   const oldMainColor=retroText.style.color;
   const oldSubColor=retroSubtext.style.color;
@@ -664,18 +690,38 @@ function showStartScreen(){
 
 function beginGame(){
   if(updateOrientationGate()) return;
+
+  requestGameFullscreen();
+
   started=true;
+
   if(startScreen) startScreen.classList.add('hidden');
+
   showRetro('LEVEL 1','GET 5 ITEMS');
+
   restartLevelTimer();
 }
 
 itemEl.addEventListener('mousedown',e=>{e.preventDefault();startDrag(e.clientX,e.clientY)});
 window.addEventListener('mousemove',e=>moveDrag(e.clientX,e.clientY));
 window.addEventListener('mouseup',e=>endDrag(e.clientX,e.clientY));
-itemEl.addEventListener('touchstart',e=>{const t=e.touches[0];startDrag(t.clientX,t.clientY)},{passive:true});
-window.addEventListener('touchmove',e=>{const t=e.touches[0]; if(t) moveDrag(t.clientX,t.clientY)},{passive:true});
-window.addEventListener('touchend',e=>{const t=e.changedTouches[0]; if(t) endDrag(t.clientX,t.clientY)},{passive:true});
+itemEl.addEventListener('touchstart',e=>{
+  e.preventDefault();
+  const t=e.touches[0];
+  startDrag(t.clientX,t.clientY);
+},{passive:false});
+
+window.addEventListener('touchmove',e=>{
+  e.preventDefault();
+  const t=e.touches[0];
+  if(t) moveDrag(t.clientX,t.clientY);
+},{passive:false});
+
+window.addEventListener('touchend',e=>{
+  e.preventDefault();
+  const t=e.changedTouches[0];
+  if(t) endDrag(t.clientX,t.clientY);
+},{passive:false});
 window.addEventListener('resize',updateOrientationGate);
 window.addEventListener('orientationchange',updateOrientationGate);
 startGameBtn.addEventListener('click',beginGame);
