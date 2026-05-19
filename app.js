@@ -781,9 +781,33 @@ function handleContinuePress(e){
 
 function handleLeavePress(e){
   stopButtonEvent(e);
+
   pausePanel.classList.add('hidden');
   pausePanel.style.display='none';
+
+  stopTimer();
+
+  started=false;
+  ended=false;
+  animating=false;
+  dragging=false;
+
+  if(document.fullscreenElement && document.exitFullscreen){
+    document.exitFullscreen().catch(()=>{});
+  }
+
+  if(document.webkitFullscreenElement && document.webkitExitFullscreen){
+    document.webkitExitFullscreen();
+  }
+
   init();
+
+  if(startScreen){
+    startScreen.style.display='flex';
+    startScreen.classList.remove('hidden');
+  }
+
+  updateOrientationGate();
 }
 
 function handlePlayAgainPress(e){
