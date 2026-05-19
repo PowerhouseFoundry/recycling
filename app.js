@@ -792,6 +792,28 @@ function handleLeavePress(e){
   animating=false;
   dragging=false;
 
+  score=0;
+  streak=0;
+  correctCount=0;
+  level=1;
+  timeLeft=60;
+  idx=0;
+  levelPerfect=true;
+  currentBackgroundIndex=0;
+  pendingBackgroundIndex=0;
+  lastMultiplier=1;
+
+  applyBackground(0);
+
+  order=shuffle(items);
+
+  clearHighlights();
+
+  gameOverPanel.classList.add('hidden');
+
+  setItem();
+  hud();
+
   if(document.fullscreenElement && document.exitFullscreen){
     document.exitFullscreen().catch(()=>{});
   }
@@ -799,8 +821,6 @@ function handleLeavePress(e){
   if(document.webkitFullscreenElement && document.webkitExitFullscreen){
     document.webkitExitFullscreen();
   }
-
-  init();
 
   if(startScreen){
     startScreen.style.display='flex';
