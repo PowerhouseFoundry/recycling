@@ -94,11 +94,16 @@ let order=[],idx=0,current=null,score=0,streak=0,correctCount=0,level=1,timeLeft
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const levelGoal=l=>l*5;
 function requestGameFullscreen(){
-  const el=document.documentElement;
+  const el=game || document.documentElement;
 
   try{
-    if(el.requestFullscreen) el.requestFullscreen();
-    else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    if(el.requestFullscreen){
+      el.requestFullscreen().catch(()=>{});
+    } else if(el.webkitRequestFullscreen){
+      el.webkitRequestFullscreen();
+    } else if(el.msRequestFullscreen){
+      el.msRequestFullscreen();
+    }
   }catch(e){}
 }
 function isTouchDevice(){
@@ -694,11 +699,9 @@ function beginGame(){
   requestGameFullscreen();
 
   started=true;
-
   if(startScreen) startScreen.classList.add('hidden');
 
   showRetro('LEVEL 1','GET 5 ITEMS');
-
   restartLevelTimer();
 }
 
