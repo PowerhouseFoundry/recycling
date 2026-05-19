@@ -696,10 +696,18 @@ function showStartScreen(){
 function beginGame(){
   if(updateOrientationGate()) return;
 
-  requestGameFullscreen();
-
   started=true;
-  if(startScreen) startScreen.classList.add('hidden');
+
+  if(startScreen){
+    startScreen.classList.add('hidden');
+    startScreen.style.display='none';
+  }
+
+  if(rotateOverlay){
+    rotateOverlay.classList.add('hidden');
+  }
+
+  requestGameFullscreen();
 
   showRetro('LEVEL 1','GET 5 ITEMS');
   restartLevelTimer();
@@ -727,7 +735,15 @@ window.addEventListener('touchend',e=>{
 },{passive:false});
 window.addEventListener('resize',updateOrientationGate);
 window.addEventListener('orientationchange',updateOrientationGate);
-startGameBtn.addEventListener('click',beginGame);
+startGameBtn.addEventListener('click',e=>{
+  e.preventDefault();
+  beginGame();
+});
+
+startGameBtn.addEventListener('touchend',e=>{
+  e.preventDefault();
+  beginGame();
+},{passive:false});
 restartBtn.addEventListener('click',init);
 playAgainBtn.addEventListener('click',init);
 

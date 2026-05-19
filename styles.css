@@ -35,7 +35,7 @@ body{background:#d8d8d8}
   backdrop-filter:blur(4px)
 }
 
-#startScreen.hidden{display:none}
+#startScreen.hidden{display:none!important}
 #rotateOverlay{
   position:absolute;
   inset:0;
@@ -48,7 +48,7 @@ body{background:#d8d8d8}
   backdrop-filter:blur(6px)
 }
 
-#rotateOverlay.hidden{display:none}
+#rotateOverlay.hidden{display:none!important}
 
 .rotate-wrap{
   width:min(680px,92vw);
