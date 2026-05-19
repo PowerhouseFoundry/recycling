@@ -381,10 +381,12 @@ function pauseGame(){
   pauseScore.textContent=`SCORE ${score}`;
 
   pausePanel.classList.remove('hidden');
+  pausePanel.style.display='flex';
 }
 
 function resumeGame(){
   pausePanel.classList.add('hidden');
+  pausePanel.style.display='none';
 
   if(!ended && started){
     continueCurrentTimer();
