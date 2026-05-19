@@ -93,9 +93,26 @@ const backgrounds=[
   { score:3000, file:'images/kitchen-background-7.png' },
   { score:4000, file:'images/kitchen-background-8.png' }
 ];
-
-let order=[],idx=0,current=null,score=0,streak=0,correctCount=0,level=1,timeLeft=60,timerId=null,dragging=false,dragStart=null,animating=false,ended=false,lastRelease=null,levelPerfect=true,panicMode=false,currentBackgroundIndex=0,pendingBackgroundIndex=0,started=false,lastMultiplier=1;
-
+let order=[],
+    idx=0,
+    current=null,
+    score=0,
+    streak=0,
+    correctCount=0,
+    level=1,
+    timeLeft=60,
+    timerId=null,
+    dragging=false,
+    dragStart=null,
+    animating=false,
+    ended=false,
+    lastRelease=null,
+    levelPerfect=true,
+    panicMode=false,
+    currentBackgroundIndex=0,
+    pendingBackgroundIndex=0,
+    started=false,
+    lastMultiplier=1;
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const levelGoal=l=>l*5;
 function requestGameFullscreen(){
@@ -193,26 +210,7 @@ function showRetro(main,sub=''){
   void retroOverlay.offsetWidth;
   retroOverlay.classList.add('show');
 }
-function showPerfectFlash(){
-  const oldMainColor=retroText.style.color;
-  const oldSubColor=retroSubtext.style.color;
-  const oldMainShadow=retroText.style.textShadow;
-  const oldSubShadow=retroSubtext.style.textShadow;
 
-  retroText.style.color='#ffd700';
-  retroSubtext.style.color='#fff1a8';
-  retroText.style.textShadow='0 0 14px rgba(255,215,0,.9),0 4px 0 #7a5600,0 8px 18px rgba(0,0,0,.45)';
-  retroSubtext.style.textShadow='0 0 10px rgba(255,215,0,.65),0 3px 0 #7a5600,0 6px 14px rgba(0,0,0,.4)';
-
-  showRetro('PERFECT!','+50 BONUS');
-
-  setTimeout(()=>{
-    retroText.style.color=oldMainColor;
-    retroSubtext.style.color=oldSubColor;
-    retroText.style.textShadow=oldMainShadow;
-    retroSubtext.style.textShadow=oldSubShadow;
-  },1200);
-}
 function showPerfectFlash(){
   const oldMainColor=retroText.style.color;
   const oldSubColor=retroSubtext.style.color;
@@ -766,15 +764,49 @@ startGameBtn.addEventListener('touchend',e=>{
   e.preventDefault();
   beginGame();
 },{passive:false});
-pauseBtn.addEventListener('click',pauseGame);
+function stopButtonEvent(e){
+  e.preventDefault();
+  e.stopPropagation();
+}
 
-continueBtn.addEventListener('click',resumeGame);
+function handlePausePress(e){
+  stopButtonEvent(e);
+  pauseGame();
+}
 
-leaveBtn.addEventListener('click',()=>{
+function handleContinuePress(e){
+  stopButtonEvent(e);
+  resumeGame();
+}
+
+function handleLeavePress(e){
+  stopButtonEvent(e);
   pausePanel.classList.add('hidden');
+  pausePanel.style.display='none';
   init();
-});
-playAgainBtn.addEventListener('click',init);
+}
+
+function handlePlayAgainPress(e){
+  stopButtonEvent(e);
+  gameOverPanel.classList.add('hidden');
+  init();
+}
+
+pauseBtn.addEventListener('click',handlePausePress);
+pauseBtn.addEventListener('touchend',handlePausePress,{passive:false});
+pauseBtn.addEventListener('pointerup',handlePausePress);
+
+continueBtn.addEventListener('click',handleContinuePress);
+continueBtn.addEventListener('touchend',handleContinuePress,{passive:false});
+continueBtn.addEventListener('pointerup',handleContinuePress);
+
+leaveBtn.addEventListener('click',handleLeavePress);
+leaveBtn.addEventListener('touchend',handleLeavePress,{passive:false});
+leaveBtn.addEventListener('pointerup',handleLeavePress);
+
+playAgainBtn.addEventListener('click',handlePlayAgainPress);
+playAgainBtn.addEventListener('touchend',handlePlayAgainPress,{passive:false});
+playAgainBtn.addEventListener('pointerup',handlePlayAgainPress);
 
 function init(){
   ended=false;
