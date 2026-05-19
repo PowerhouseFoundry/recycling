@@ -52,7 +52,12 @@ const counterEl=document.getElementById('counter');
 const streakEl=document.getElementById('streak');
 const streakPill=document.getElementById('streakPill');
 const feedbackEl=document.getElementById('feedback');
-const restartBtn=document.getElementById('restartBtn');
+const pauseBtn=document.getElementById('pauseBtn');
+const pausePanel=document.getElementById('pausePanel');
+const pauseLevel=document.getElementById('pauseLevel');
+const pauseScore=document.getElementById('pauseScore');
+const continueBtn=document.getElementById('continueBtn');
+const leaveBtn=document.getElementById('leaveBtn');
 const playAgainBtn=document.getElementById('playAgainBtn');
 const retroOverlay=document.getElementById('retroOverlay');
 const retroText=document.getElementById('retroText');
@@ -369,7 +374,24 @@ function stopTimer(){
   timerId=null;
   setPanicMode(false);
 }
+function pauseGame(){
+  if(ended || !started) return;
 
+  stopTimer();
+
+  pauseLevel.textContent=`LEVEL ${level}`;
+  pauseScore.textContent=`SCORE ${score}`;
+
+  pausePanel.classList.remove('hidden');
+}
+
+function resumeGame(){
+  pausePanel.classList.add('hidden');
+
+  if(!ended && started){
+    continueCurrentTimer();
+  }
+}
 function continueCurrentTimer(){
   stopTimer();
   hud();
@@ -744,7 +766,14 @@ startGameBtn.addEventListener('touchend',e=>{
   e.preventDefault();
   beginGame();
 },{passive:false});
-restartBtn.addEventListener('click',init);
+pauseBtn.addEventListener('click',pauseGame);
+
+continueBtn.addEventListener('click',resumeGame);
+
+leaveBtn.addEventListener('click',()=>{
+  pausePanel.classList.add('hidden');
+  init();
+});
 playAgainBtn.addEventListener('click',init);
 
 function init(){

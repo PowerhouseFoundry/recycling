@@ -84,7 +84,21 @@
     <img id="currentItem" draggable="false" alt="Current item">
     <div id="dragLine"></div>
 
-    <button id="restartBtn" type="button">Restart</button>
+    <button id="pauseBtn" type="button">Pause</button>
+
+<div id="pausePanel" class="hidden">
+  <div class="pause-inner">
+    <div class="pause-title">PAUSED</div>
+
+    <div class="pause-line" id="pauseLevel">LEVEL 1</div>
+    <div class="pause-line" id="pauseScore">SCORE 0</div>
+
+    <div class="pause-buttons">
+      <button id="continueBtn" type="button">CONTINUE</button>
+      <button id="leaveBtn" type="button">LEAVE GAME</button>
+    </div>
+  </div>
+</div>
   </div>
   <script src="app.js"></script>
 </body>
